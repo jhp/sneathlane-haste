@@ -8,6 +8,7 @@ module SneathLane.Graphics (
   drawGraphic,
   graphicBounds,
   inGraphic,
+  noGraphic,
 
   inRect,
   measureText,
@@ -180,7 +181,7 @@ jsMeasureText :: Ctx -> JSString -> IO Double
 jsMeasureText = ffi "(function(ctx, str) { return ctx.measureText(str).width; })"
 
 measureCanvas :: Canvas
-measureCanvas = fromJust $ unsafePerformIO (createCanvas 1 1)
+measureCanvas = unsafePerformIO (createCanvas 1 1)
 
 measureText :: TextStyle -> JSString -> Double
 measureText textStyle text = (1/pixelRatio) * (unsafePerformIO $ render measureCanvas $ withContext (\ctx -> jsFont ctx (toFontString textStyle) >> jsMeasureText ctx text))
@@ -202,3 +203,6 @@ getPixelRatio = ffi "(function() { return window.devicePixelRatio; })"
 
 pixelRatio :: Double
 pixelRatio = unsafePerformIO $ getPixelRatio
+
+noGraphic :: Graphic
+noGraphic = BlankGraphic (Rect 0 0 0 0)
